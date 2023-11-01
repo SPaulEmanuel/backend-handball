@@ -1,5 +1,6 @@
 ﻿using aplicatieHandbal.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 using System.Numerics;
 
 namespace aplicatieHandbal.Data
@@ -12,7 +13,9 @@ namespace aplicatieHandbal.Data
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Articole> Articles { get; set; }
+        public DbSet<Articole> Articole { get; set; }
+        public DbSet<Staff> Staff { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Game>()
@@ -23,6 +26,9 @@ namespace aplicatieHandbal.Data
            
             modelBuilder.Entity<Player>()
                 .Property(p => p.Salary)
+                .HasColumnType("decimal(18, 2)");
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.Price)
                 .HasColumnType("decimal(18, 2)");
 
 

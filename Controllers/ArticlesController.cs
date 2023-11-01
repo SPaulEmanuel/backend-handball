@@ -26,7 +26,7 @@ namespace aplicatieHandbal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddArticole([FromBody] Articole articoleRequest)
         {
-            articoleRequest.Id = Guid.NewGuid();
+            articoleRequest.ArticoleID = Guid.NewGuid();
             await _aplicatieDBContext.Articole.AddAsync(articoleRequest);
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(articoleRequest);
@@ -36,7 +36,7 @@ namespace aplicatieHandbal.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetArticole([FromRoute] Guid id)
         {
-            var articole = await _aplicatieDBContext.Articole.FirstOrDefaultAsync(x => x.Id == id);
+            var articole = await _aplicatieDBContext.Articole.FirstOrDefaultAsync(x => x.ArticoleID == id);
             if (articole == null)
             {
                 return NotFound();

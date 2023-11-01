@@ -1,2 +1,0 @@
-# backend-handball
-Backend-Handball

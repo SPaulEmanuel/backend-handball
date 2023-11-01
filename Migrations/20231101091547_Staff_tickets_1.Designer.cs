@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using aplicatieHandbal.Data;
 
@@ -11,9 +12,11 @@ using aplicatieHandbal.Data;
 namespace aplicatieHandbal.Migrations
 {
     [DbContext(typeof(AplicatieDBContext))]
-    partial class AplicatieDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231101091547_Staff_tickets_1")]
+    partial class Staff_tickets_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +27,7 @@ namespace aplicatieHandbal.Migrations
 
             modelBuilder.Entity("aplicatieHandbal.Models.Articole", b =>
                 {
-                    b.Property<Guid>("ArticoleID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -47,14 +50,14 @@ namespace aplicatieHandbal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ArticoleID");
+                    b.HasKey("Id");
 
                     b.ToTable("Articole");
                 });
 
             modelBuilder.Entity("aplicatieHandbal.Models.Game", b =>
                 {
-                    b.Property<Guid>("GameID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -94,7 +97,7 @@ namespace aplicatieHandbal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GameID");
+                    b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
 
@@ -103,7 +106,7 @@ namespace aplicatieHandbal.Migrations
 
             modelBuilder.Entity("aplicatieHandbal.Models.Player", b =>
                 {
-                    b.Property<Guid>("PlayerID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -155,14 +158,14 @@ namespace aplicatieHandbal.Migrations
                     b.Property<double>("Weight")
                         .HasColumnType("float");
 
-                    b.HasKey("PlayerID");
+                    b.HasKey("Id");
 
                     b.ToTable("Players");
                 });
 
             modelBuilder.Entity("aplicatieHandbal.Models.Staff", b =>
                 {
-                    b.Property<Guid>("StaffID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -178,21 +181,21 @@ namespace aplicatieHandbal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("StaffID");
+                    b.HasKey("Id");
 
                     b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("aplicatieHandbal.Models.Ticket", b =>
                 {
-                    b.Property<Guid>("TicketID")
+                    b.Property<Guid>("TicketId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("GameID")
+                    b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Location")
@@ -204,14 +207,14 @@ namespace aplicatieHandbal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("TicketID");
+                    b.HasKey("TicketId");
 
-                    b.HasIndex("GameID");
+                    b.HasIndex("GameId");
 
                     b.ToTable("Tickets");
                 });
@@ -231,7 +234,7 @@ namespace aplicatieHandbal.Migrations
                 {
                     b.HasOne("aplicatieHandbal.Models.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameID")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

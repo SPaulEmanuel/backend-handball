@@ -24,7 +24,7 @@ namespace aplicatieHandbal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddGame([FromBody] Game gameRequest)
         {
-            gameRequest.Id = Guid.NewGuid();
+            gameRequest.GameID = Guid.NewGuid();
             await _aplicatieDBContext.Games.AddAsync(gameRequest);
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(gameRequest);
@@ -34,7 +34,7 @@ namespace aplicatieHandbal.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetGame([FromRoute] Guid id)
         {
-            var game = await _aplicatieDBContext.Games.FirstOrDefaultAsync(x => x.Id == id);
+            var game = await _aplicatieDBContext.Games.FirstOrDefaultAsync(x => x.GameID == id);
             if (game == null)
             {
                 return NotFound();

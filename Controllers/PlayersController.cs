@@ -1,5 +1,6 @@
 ﻿using aplicatieHandbal.Data;
 using aplicatieHandbal.Models;
+using aplicatieHandbal.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +9,17 @@ namespace aplicatieHandbal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlayersController : Controller
+    public class PlayerController : Controller
     {
+        private readonly IPlayerService _playerService;
+
+      
         private readonly AplicatieDBContext _aplicatieDBContext;
-        public PlayersController(AplicatieDBContext aplicatieDBContext)
+        public PlayerController( AplicatieDBContext aplicatieDBContext)
         {
-            _aplicatieDBContext = aplicatieDBContext;
+            _aplicatieDBContext = aplicatieDBContext!;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllEmployees()
         {
@@ -24,7 +29,7 @@ namespace aplicatieHandbal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPlayer([FromBody] Player playerRequest)
         {
-            playerRequest.Id = Guid.NewGuid();
+            playerRequest.PlayerID = Guid.NewGuid();
             await _aplicatieDBContext.Players.AddAsync(playerRequest);
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(playerRequest);
@@ -34,7 +39,7 @@ namespace aplicatieHandbal.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
         {
-            var player = await _aplicatieDBContext.Players.FirstOrDefaultAsync(x => x.Id == id);
+            var player = await _aplicatieDBContext.Players.FirstOrDefaultAsync(x => x.PlayerID == id);
             if (player == null)
             {
                 return NotFound();

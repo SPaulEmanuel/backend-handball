@@ -2,7 +2,7 @@
 {
     public class Player
     {
-        public Guid Id { get; set; }
+        public Guid PlayerID { get; set; }
         public string Name { get; set; }
         public string Vorname { get; set; }
         public int Age { get; set; }

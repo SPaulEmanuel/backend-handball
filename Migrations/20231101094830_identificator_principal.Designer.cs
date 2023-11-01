@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using aplicatieHandbal.Data;
 
@@ -11,9 +12,11 @@ using aplicatieHandbal.Data;
 namespace aplicatieHandbal.Migrations
 {
     [DbContext(typeof(AplicatieDBContext))]
-    partial class AplicatieDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231101094830_identificator_principal")]
+    partial class identificator_principal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
