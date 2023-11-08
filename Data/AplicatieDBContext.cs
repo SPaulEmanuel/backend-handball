@@ -30,8 +30,8 @@ namespace aplicatieHandbal.Data
             modelBuilder.Entity<Ticket>()
                 .Property(t => t.Price)
                 .HasColumnType("decimal(18, 2)");
-
-
+     
+            modelBuilder.Entity<Staff>().HasData(new { StaffID = Guid.NewGuid(), Name ="dewdew",Vorname="dewd",ImageUrl="empty" }); 
             base.OnModelCreating(modelBuilder);
         }
   

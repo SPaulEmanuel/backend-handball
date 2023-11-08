@@ -34,6 +34,8 @@ namespace aplicatieHandbal.Controllers
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(playerRequest);
         }
+
+       
         [HttpGet]
 
         [Route("{id:Guid}")]
