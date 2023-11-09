@@ -1,7 +1,6 @@
 using aplicatieHandbal.Data;
+using aplicatieHandbal.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +14,8 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("FullStackConnectionString"));
 });
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

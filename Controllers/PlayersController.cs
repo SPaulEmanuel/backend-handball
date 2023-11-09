@@ -2,6 +2,7 @@
 using aplicatieHandbal.Models;
 using aplicatieHandbal.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,13 @@ namespace aplicatieHandbal.Controllers
 
       
         private readonly AplicatieDBContext _aplicatieDBContext;
-        public PlayerController( AplicatieDBContext aplicatieDBContext)
+        public PlayerController(IPlayerService playerService, AplicatieDBContext dbContext)
         {
-            _aplicatieDBContext = aplicatieDBContext!;
+            _playerService = playerService!;
+            _aplicatieDBContext = dbContext;
         }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAllPlayers()
         {
             var players = await _aplicatieDBContext.Players.ToListAsync();
             return Ok(players);
@@ -34,12 +35,10 @@ namespace aplicatieHandbal.Controllers
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(playerRequest);
         }
-
-       
         [HttpGet]
 
         [Route("{id:Guid}")]
-        public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
+        public async Task<IActionResult> GetPlayer([FromRoute] Guid id)
         {
             var player = await _aplicatieDBContext.Players.FirstOrDefaultAsync(x => x.PlayerID == id);
             if (player == null)
@@ -48,6 +47,27 @@ namespace aplicatieHandbal.Controllers
             }
             return Ok(player);
         }
+        [HttpPatch]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> PatchPlayer([FromRoute] Guid id, [FromBody] JsonPatchDocument<Player> patchDocument)
+        {
+            if (patchDocument == null)
+            {
+                return BadRequest();
+            }
+
+            var player = await _aplicatieDBContext.Players.FindAsync(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            patchDocument.ApplyTo(player);
+
+            await _aplicatieDBContext.SaveChangesAsync();
+            return Ok(player);
+        }
+
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> updatePlayer([FromRoute] Guid id, Player updatePlayerReq)

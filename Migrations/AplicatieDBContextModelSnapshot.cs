@@ -181,15 +181,6 @@ namespace aplicatieHandbal.Migrations
                     b.HasKey("StaffID");
 
                     b.ToTable("Staff");
-
-                    b.HasData(
-                        new
-                        {
-                            StaffID = new Guid("64a01342-4ffa-41d4-87d2-d0af3ec8127b"),
-                            ImageUrl = "empty",
-                            Name = "dewdew",
-                            Vorname = "dewd"
-                        });
                 });
 
             modelBuilder.Entity("aplicatieHandbal.Models.Ticket", b =>

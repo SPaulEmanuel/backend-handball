@@ -16,7 +16,7 @@ namespace aplicatieHandbal.Controllers
             _aplicatieDBContext = aplicatieDBContext;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAllGames()
         {
             var games = await _aplicatieDBContext.Games.ToListAsync();
             return Ok(games);
