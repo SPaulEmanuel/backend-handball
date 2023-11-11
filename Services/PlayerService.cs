@@ -31,10 +31,13 @@ namespace aplicatieHandbal.Services
         public async Task<Player> DeletePlayer(Guid id)
         {
             var player = await _aplicatieDBContext.Players.FindAsync(id);
-           
-            _aplicatieDBContext.Players.Remove(player);
-            await _aplicatieDBContext.SaveChangesAsync();
-            return player;
+           if (player is not null) {
+                _aplicatieDBContext.Players.Remove(player);
+                await _aplicatieDBContext.SaveChangesAsync();
+                return player;
+            }
+           throw new Exception("Cannot delete id");
+            
         }
 
         public async Task<List<Player>> GetAllPlayers()
@@ -46,30 +49,38 @@ namespace aplicatieHandbal.Services
         public async Task<Player> GetPlayerById(Guid id)
         {
             var player = await _aplicatieDBContext.Players.FirstOrDefaultAsync(x => x.PlayerID == id);
-            return player;
+            if (player is not null)
+            {
+                return player;
+                
+            }
+            throw new Exception("Player not found");
         }
 
         public async Task<Player> UpdatePlayer(Guid id, Player updatePlayerReq)
         {
             var player = await _aplicatieDBContext.Players.FindAsync(id);
+            if (player is not null)
+            {
+                player.Name = updatePlayerReq.Name;
+                player.Vorname = updatePlayerReq.Vorname;
+                player.Age = updatePlayerReq.Age;
+                player.Position = updatePlayerReq.Position;
+                player.Height = updatePlayerReq.Height;
+                player.Weight = updatePlayerReq.Weight;
+                player.Nationality = updatePlayerReq.Nationality;
+                player.JerseyNumber = updatePlayerReq.JerseyNumber;
+                player.ContractStartDate = updatePlayerReq.ContractStartDate;
+                player.ContractEndDate = updatePlayerReq.ContractEndDate;
+                player.Salary = updatePlayerReq.Salary;
+                player.GoalsScored = updatePlayerReq.GoalsScored;
+                player.ImageUrl = updatePlayerReq.ImageUrl;
+                player.InstagramProfile = updatePlayerReq.InstagramProfile;
 
-            player.Name = updatePlayerReq.Name;
-            player.Vorname = updatePlayerReq.Vorname;
-            player.Age = updatePlayerReq.Age;
-            player.Position = updatePlayerReq.Position;
-            player.Height = updatePlayerReq.Height;
-            player.Weight = updatePlayerReq.Weight;
-            player.Nationality = updatePlayerReq.Nationality;
-            player.JerseyNumber = updatePlayerReq.JerseyNumber;
-            player.ContractStartDate = updatePlayerReq.ContractStartDate;
-            player.ContractEndDate = updatePlayerReq.ContractEndDate;
-            player.Salary = updatePlayerReq.Salary;
-            player.GoalsScored = updatePlayerReq.GoalsScored;
-            player.ImageUrl = updatePlayerReq.ImageUrl;
-            player.InstagramProfile = updatePlayerReq.InstagramProfile;
-
-            await _aplicatieDBContext.SaveChangesAsync();
-            return player;
+                await _aplicatieDBContext.SaveChangesAsync();
+                return player;
+            }
+            throw new Exception("ID not found");
         }
     }
 
