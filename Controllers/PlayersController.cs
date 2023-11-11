@@ -21,53 +21,34 @@ namespace aplicatieHandbal.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllPlayers()
         {
-
-            var players = await _playerService.GetAllPlayers();
-            return Ok(players);
+  
+            return Ok(await _playerService.GetAllPlayers());
         }
         [HttpPost]
         public async Task<IActionResult> AddPlayer([FromBody] Player playerRequest)
         {
             
-            var player=await _playerService.AddPlayer(playerRequest);
-            return Ok(player);
+            return Ok(await _playerService.AddPlayer(playerRequest));
         }
         [HttpGet]
 
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetPlayer([FromRoute] Guid id)
-        {
-            var player = await _playerService.GetPlayerById(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-            return Ok(player);
+        {   
+            return Ok(await _playerService.GetPlayerById(id));
         }
        
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> updatePlayer([FromRoute] Guid id, Player updatePlayerReq)
         {
-            var player = await _playerService.UpdatePlayer(id, updatePlayerReq);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(player);
+            return Ok(await _playerService.UpdatePlayer(id, updatePlayerReq));
         }
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IActionResult> deletePlayer([FromRoute] Guid id)
         {
-            var player = await _playerService.DeletePlayer(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(player);
+            return Ok(await _playerService.DeletePlayer(id));
         }
     }
 }
