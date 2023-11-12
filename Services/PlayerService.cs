@@ -80,9 +80,6 @@ namespace aplicatieHandbal.Services
         public async Task<Player> UpdatePlayer(Guid id, Player updatePlayerReq)
         {
 
-
-
-
             var player = await _aplicatieDBContext.Players.FindAsync(id);
             if (player is not null)
             {

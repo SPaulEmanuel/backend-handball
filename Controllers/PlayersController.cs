@@ -10,6 +10,7 @@ namespace aplicatieHandbal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [RequireHttps]
     public class PlayerController : Controller
     {
         private readonly IPlayerService _playerService;
