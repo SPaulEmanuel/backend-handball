@@ -16,6 +16,8 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 });
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
+    builder.Services.AddScoped<IGameService, GameService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
