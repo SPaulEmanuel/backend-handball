@@ -1,7 +1,7 @@
 using aplicatieHandbal.Data;
 using aplicatieHandbal.Services;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.JsonPatch;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,7 +16,8 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 });
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
-    builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 var app = builder.Build();
 

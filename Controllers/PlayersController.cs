@@ -43,7 +43,13 @@ namespace aplicatieHandbal.Controllers
         {   
             return Ok(await _playerService.GetPlayerById(id));
         }
-       
+        [HttpPatch]
+        [Route("{id:Guid}")]
+
+        public async Task<IActionResult> updatePlayerPatch([FromRoute] Guid id, JsonPatchDocument updatePlayerReq)
+        {
+            return Ok(await _playerService.updatePlayerPatch(id,updatePlayerReq));
+        }
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> updatePlayer([FromRoute] Guid id, Player updatePlayerReq)

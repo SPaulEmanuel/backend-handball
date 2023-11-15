@@ -2,6 +2,7 @@
 using aplicatieHandbal.Models;
 using aplicatieHandbal.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
 namespace aplicatieHandbal.Services
@@ -14,6 +15,7 @@ namespace aplicatieHandbal.Services
         Task<Player> GetPlayerById(Guid id);
         Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
         Task<Player> DeletePlayer(Guid id);
+        Task<Player> updatePlayerPatch(Guid id, JsonPatchDocument updatedPlayerReq);
     }
 
     public class PlayerService : IPlayerService
@@ -57,7 +59,7 @@ namespace aplicatieHandbal.Services
                 .Select(player => new PlayerDto
                 {
                     Name = player.Name,
-                    Vorname = player.Vorname,
+                    Surname = player.Surname,
                     ImageUrl = player.ImageUrl
                 })
                 .ToListAsync();
@@ -76,6 +78,17 @@ namespace aplicatieHandbal.Services
             }
             throw new Exception("Player not found");
         }
+        public async Task<Player> updatePlayerPatch(Guid id, JsonPatchDocument updatedPlayerPatch)
+        {
+            var player = await _aplicatieDBContext.Players.FindAsync(id);
+            if (player != null)
+            {
+                updatedPlayerPatch.ApplyTo(player);
+                await _aplicatieDBContext.SaveChangesAsync();
+                return player;
+            }
+            throw new Exception("player not found ");
+        }
 
         public async Task<Player> UpdatePlayer(Guid id, Player updatePlayerReq)
         {
@@ -86,7 +99,7 @@ namespace aplicatieHandbal.Services
                 var validator = new PlayerValidator();
                 validator.ValidateAndThrow(updatePlayerReq);
                 player.Name = updatePlayerReq.Name;
-                player.Vorname = updatePlayerReq.Vorname;
+                player.Surname = updatePlayerReq.Surname;
                 player.Age = updatePlayerReq.Age;
                 player.Position = updatePlayerReq.Position;
                 player.Height = updatePlayerReq.Height;
