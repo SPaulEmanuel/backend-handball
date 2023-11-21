@@ -2,6 +2,7 @@ using aplicatieHandbal.Data;
 using aplicatieHandbal.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.JsonPatch;
+using Newtonsoft.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,7 +18,10 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped<IGameService, GameService>();
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver 
+    =new DefaultContractResolver());
 
 var app = builder.Build();
 

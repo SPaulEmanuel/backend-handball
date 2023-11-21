@@ -24,12 +24,29 @@ namespace aplicatieHandbal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddArticole([FromBody] Articole articoleRequest)
-        {
-            articoleRequest.ArticoleID = Guid.NewGuid();
-            await _aplicatieDBContext.Articole.AddAsync(articoleRequest);
+        public async Task<IActionResult> CreateArticle([FromForm] ArticleInputModel model)
+        { 
+            byte[] imageData;
+            using (var stream = model.Image.OpenReadStream())
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream);
+                imageData = memoryStream.ToArray();
+            }
+
+            // Save article to database
+            var article = new Articole
+            {
+                Title = model.Title,
+                Content = model.Content,
+                DatePublished = DateTime.Now,
+                ImageData = imageData
+            };
+
+            _aplicatieDBContext.Articole.Add(article);
             await _aplicatieDBContext.SaveChangesAsync();
-            return Ok(articoleRequest);
+
+            return Ok(article);
         }
 
         [HttpGet]
@@ -58,7 +75,7 @@ namespace aplicatieHandbal.Controllers
             articole.Author = updateArticoleReq.Author;
             articole.Content = updateArticoleReq.Content;
             articole.DatePublished = updateArticoleReq.DatePublished;
-            articole.ImageUrl = updateArticoleReq.ImageUrl;
+           // articole.ImageUrl = updateArticoleReq.ImageUrl;
 
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(articole);
