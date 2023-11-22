@@ -12,8 +12,8 @@ using aplicatieHandbal.Data;
 namespace aplicatieHandbal.Migrations
 {
     [DbContext(typeof(AplicatieDBContext))]
-    [Migration("20231112184906_newGameProp")]
-    partial class newGameProp
+    [Migration("20231122191951_updateDate")]
+    partial class updateDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,9 @@ namespace aplicatieHandbal.Migrations
                     b.Property<DateTime>("DatePublished")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<byte[]>("ImageData")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -150,7 +150,7 @@ namespace aplicatieHandbal.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<string>("Vorname")
+                    b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

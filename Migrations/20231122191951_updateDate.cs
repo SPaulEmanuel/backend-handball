@@ -5,7 +5,7 @@
 namespace aplicatieHandbal.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateSalaryColumnType : Migration
+    public partial class updateDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using aplicatieHandbal.Data;
 namespace aplicatieHandbal.Migrations
 {
     [DbContext(typeof(AplicatieDBContext))]
-    [Migration("20231121183036_modelArticole")]
-    partial class modelArticole
+    [Migration("20231122145124_articoleTabel")]
+    partial class articoleTabel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -38,6 +38,7 @@ namespace aplicatieHandbal.Controllers
             var article = new Articole
             {
                 Title = model.Title,
+                Author= model.Author,
                 Content = model.Content,
                 DatePublished = DateTime.Now,
                 ImageData = imageData
@@ -75,7 +76,7 @@ namespace aplicatieHandbal.Controllers
             articole.Author = updateArticoleReq.Author;
             articole.Content = updateArticoleReq.Content;
             articole.DatePublished = updateArticoleReq.DatePublished;
-           // articole.ImageUrl = updateArticoleReq.ImageUrl;
+            articole.ImageData = updateArticoleReq.ImageData;
 
             await _aplicatieDBContext.SaveChangesAsync();
             return Ok(articole);

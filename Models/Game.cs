@@ -20,7 +20,7 @@ namespace aplicatieHandbal.Models
         public string Description { get; set; }
         public int Attendance { get; set; }
         public string MediaUrl { get; set; }
-        
+
     }
     public enum GameResult
     {

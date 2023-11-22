@@ -16,6 +16,7 @@
         public decimal Salary { get; set; }
         public int GoalsScored { get; set; }
         public string ImageUrl { get; set; }
+
         public string InstagramProfile { get; set; }
 
     }
