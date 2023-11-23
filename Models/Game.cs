@@ -19,7 +19,7 @@ namespace aplicatieHandbal.Models
         public GameStatus Status { get; set; }
         public string Description { get; set; }
         public int Attendance { get; set; }
-        public string MediaUrl { get; set; }
+        public byte[] MediaUrl { get; set; }
 
     }
     public enum GameResult

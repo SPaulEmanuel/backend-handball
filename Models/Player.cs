@@ -15,7 +15,7 @@
         public DateTime ContractEndDate { get; set; }
         public decimal Salary { get; set; }
         public int GoalsScored { get; set; }
-        public string ImageUrl { get; set; }
+        public byte[] ImageUrl { get; set; }
 
         public string InstagramProfile { get; set; }
 
