@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace aplicatieHandbal.Models
 {
@@ -11,6 +12,7 @@ namespace aplicatieHandbal.Models
         public string Content { get; set; }
         public DateTime DatePublished { get; set; }
         public byte[] ImageData { get; set; }
+
 
     }
 }

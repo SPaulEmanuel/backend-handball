@@ -10,7 +10,7 @@ namespace aplicatieHandbal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [RequireHttps]
+
     public class PlayerController : Controller
     {
         private readonly IPlayerService _playerService;
@@ -31,10 +31,10 @@ namespace aplicatieHandbal.Controllers
             return Ok(await _playerService.GetAllInfoPlayers());
         }
         [HttpPost]
-        public async Task<IActionResult> AddPlayer([FromBody] Player playerRequest)
+        public async Task<IActionResult> AddPlayer([FromForm] PlayerInputModel model)
         {
             
-            return Ok(await _playerService.AddPlayer(playerRequest));
+            return Ok(await _playerService.AddPlayer(model));
         }
         [HttpGet]
 

@@ -2,15 +2,13 @@
 using aplicatieHandbal.Models;
 using FluentValidation;
 
-public class PlayerValidator : AbstractValidator<Player>
+public class PlayerValidator : AbstractValidator<PlayerInputModel>
 {
     public PlayerValidator()
     {
         RuleFor(player => player.Name).NotEmpty().WithMessage("Name is required");
-        RuleFor(player => player.Surname).NotEmpty().WithMessage("Vorname is required");
-        RuleFor(player => player.Age)
-            .InclusiveBetween(16, 50)
-            .WithMessage("Age must be between 16 and 50");
-
+        RuleFor(player => player.Surname).NotEmpty().WithMessage("Surname is required");
+       
+      
     }
 }

@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace aplicatieHandbal.Models
 {
-    public class Player
+    public class PlayerInputModel
     {
-        public Guid PlayerID { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
+        public string Surname { get; set; } = string.Empty;
         public int Age { get; set; }
         public string Position { get; set; }
         public double Height { get; set; }
@@ -17,8 +16,8 @@ namespace aplicatieHandbal.Models
         public DateTime ContractEndDate { get; set; }
         public decimal Salary { get; set; }
         public int GoalsScored { get; set; }
-        public byte[] ImageUrl { get; set; }
         public string InstagramProfile { get; set; }
-
+        [Required]
+        public IFormFile Image { get; set; }
     }
 }

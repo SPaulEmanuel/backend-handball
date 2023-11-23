@@ -13,5 +13,4 @@ namespace aplicatieHandbal.Models
         [Required]
         public IFormFile Image { get; set; }
     }
-
 }

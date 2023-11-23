@@ -1,6 +1,8 @@
 ﻿using aplicatieHandbal.Data;
 using aplicatieHandbal.Models;
+using aplicatieHandbal.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace aplicatieHandbal.Controllers
@@ -9,91 +11,52 @@ namespace aplicatieHandbal.Controllers
     [ApiController]
     public class ArticoleController : Controller
     {
-        private readonly AplicatieDBContext _aplicatieDBContext;
+        private readonly IArticleService _playerService;
 
-        public ArticoleController(AplicatieDBContext aplicatieDBContext)
+        public ArticoleController(IArticleService playerService)
         {
-            _aplicatieDBContext = aplicatieDBContext;
+           _playerService = playerService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllArticole()
-        {
-            var articole = await _aplicatieDBContext.Articole.ToListAsync();
-            return Ok(articole);
+        { 
+            return Ok(await _playerService.GetAllArticole());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateArticle([FromForm] ArticleInputModel model)
+        public async Task<IActionResult> CreateArticle([FromForm] ArticleInputModel articol)
         { 
-            byte[] imageData;
-            using (var stream = model.Image.OpenReadStream())
-            using (var memoryStream = new MemoryStream())
-            {
-                await stream.CopyToAsync(memoryStream);
-                imageData = memoryStream.ToArray();
-            }
-
-            // Save article to database
-            var article = new Articole
-            {
-                Title = model.Title,
-                Author= model.Author,
-                Content = model.Content,
-                DatePublished = DateTime.Now,
-                ImageData = imageData
-            };
-
-            _aplicatieDBContext.Articole.Add(article);
-            await _aplicatieDBContext.SaveChangesAsync();
-
-            return Ok(article);
+            return Ok(await _playerService.CreateArticle(articol));
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> GetArticole([FromRoute] Guid id)
+        public async Task<IActionResult> GetArticoleById([FromRoute] Guid id)
         {
-            var articole = await _aplicatieDBContext.Articole.FirstOrDefaultAsync(x => x.ArticoleID == id);
-            if (articole == null)
-            {
-                return NotFound();
-            }
-            return Ok(articole);
+
+            return Ok(await _playerService.GetArticoleById(id));
         }
 
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateArticole([FromRoute] Guid id, Articole updateArticoleReq)
         {
-            var articole = await _aplicatieDBContext.Articole.FindAsync(id);
-            if (articole == null)
-            {
-                return NotFound();
-            }
-
-            articole.Title = updateArticoleReq.Title;
-            articole.Author = updateArticoleReq.Author;
-            articole.Content = updateArticoleReq.Content;
-            articole.DatePublished = updateArticoleReq.DatePublished;
-            articole.ImageData = updateArticoleReq.ImageData;
-
-            await _aplicatieDBContext.SaveChangesAsync();
-            return Ok(articole);
+            return Ok(await _playerService.UpdateArticole(id, updateArticoleReq));
         }
 
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IActionResult> DeleteArticole([FromRoute] Guid id)
         {
-            var articole = await _aplicatieDBContext.Articole.FindAsync(id);
-            if (articole == null)
-            {
-                return NotFound();
-            }
-            _aplicatieDBContext.Articole.Remove(articole);
-            await _aplicatieDBContext.SaveChangesAsync();
-            return Ok(articole);
+      
+            return Ok(await _playerService.DeleteArticole(id));
+        }
+        [HttpPatch]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> updateArticlePatch([FromRoute] Guid id, JsonPatchDocument updatedArticleReq)
+        {
+            return Ok(await _playerService.updateArticlePatch(id, updatedArticleReq));
         }
     }
 }

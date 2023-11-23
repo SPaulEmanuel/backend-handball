@@ -3,6 +3,7 @@ using aplicatieHandbal.Models;
 using aplicatieHandbal.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace aplicatieHandbal.Services
@@ -11,7 +12,7 @@ namespace aplicatieHandbal.Services
     {
         Task<List<PlayerDto>> GetAllPlayers();
         Task<List<Player>> GetAllInfoPlayers();
-        Task<Player> AddPlayer(Player player);
+        Task<Player> AddPlayer(PlayerInputModel model);
         Task<Player> GetPlayerById(Guid id);
         Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
         Task<Player> DeletePlayer(Guid id);
@@ -25,14 +26,40 @@ namespace aplicatieHandbal.Services
         {
             _aplicatieDBContext = dbContext;
         }
-        public async Task<Player> AddPlayer(Player playerRequest)
+        public async Task<Player> AddPlayer(PlayerInputModel model)
         {
             var validator = new PlayerValidator();
-            validator.ValidateAndThrow(playerRequest);
-            playerRequest.PlayerID = Guid.NewGuid();
-            await _aplicatieDBContext.Players.AddAsync(playerRequest);
+            validator.ValidateAndThrow(model);
+
+            byte[] imageUrl;
+            using (var stream = model.Image.OpenReadStream())
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream);
+                imageUrl = memoryStream.ToArray();
+            }
+            var player = new Player
+            {
+                Name = model.Name,
+                Surname = model.Surname,
+                Age = model.Age,
+                Position = model.Position,
+                Height = model.Height,
+                Weight = model.Weight,
+                Nationality = model.Nationality,
+                JerseyNumber = model.JerseyNumber,  
+                ContractStartDate = model.ContractStartDate,
+                ContractEndDate = model.ContractEndDate,
+                Salary = model.Salary,
+                GoalsScored = model.GoalsScored,
+                ImageUrl = imageUrl,
+                InstagramProfile = model.InstagramProfile
+                
+            };
+
+            _aplicatieDBContext.Players.Add(player);
             await _aplicatieDBContext.SaveChangesAsync();
-            return playerRequest;
+            return player;
         }
 
         public async Task<Player> DeletePlayer(Guid id)
@@ -96,8 +123,8 @@ namespace aplicatieHandbal.Services
             var player = await _aplicatieDBContext.Players.FindAsync(id);
             if (player is not null)
             {
-                var validator = new PlayerValidator();
-                validator.ValidateAndThrow(updatePlayerReq);
+                //var validator = new PlayerValidator();
+                //validator.ValidateAndThrow(updatePlayerReq);
                 player.Name = updatePlayerReq.Name;
                 player.Surname = updatePlayerReq.Surname;
                 player.Age = updatePlayerReq.Age;
