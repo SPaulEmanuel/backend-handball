@@ -11,8 +11,7 @@ namespace aplicatieHandbal.Models
 
         public string Content { get; set; }
         public DateTime DatePublished { get; set; }
-        public byte[] ImageData { get; set; }
-
+        public string ImageUrl { get; set; }
 
     }
 }

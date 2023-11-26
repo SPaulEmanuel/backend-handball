@@ -17,7 +17,9 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped<IGameService, GameService>();
+
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<AzureBlobStorageService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)

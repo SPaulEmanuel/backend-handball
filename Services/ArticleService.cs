@@ -10,7 +10,7 @@ namespace aplicatieHandbal.Services
     public interface IArticleService
     {
         Task<List<Articole>> GetAllArticole();
-        Task<Articole> CreateArticle(ArticleInputModel articol);
+        Task<Articole> CreateArticle(string title, string author, string content, DateTime datePublished, [FromForm] IFormFile image);
         Task<Articole> GetArticoleById(Guid id);
         Task<Articole> UpdateArticole(Guid id, Articole updateArticoleReq);
         Task<Articole> DeleteArticole(Guid id);
@@ -18,37 +18,40 @@ namespace aplicatieHandbal.Services
     }
     public class ArticleService: IArticleService
     {
-       
+
         private readonly AplicatieDBContext _aplicatieDBContext;
-        public ArticleService(AplicatieDBContext aplicatieDBContext)
+        private readonly AzureBlobStorageService _blobStorageService;
+
+        public ArticleService(AplicatieDBContext aplicatieDBContext, AzureBlobStorageService blobStorageService)
         {
             _aplicatieDBContext = aplicatieDBContext;
+            _blobStorageService = blobStorageService;
         }
-
-        public async Task<Articole> CreateArticle([FromForm] ArticleInputModel articol)
+        public async Task<Articole> CreateArticle(string title, string author, string content, DateTime datePublished, [FromForm] IFormFile image)
         {
-            byte[] imageData;
-            using (var stream = articol.Image.OpenReadStream())
-            using (var memoryStream = new MemoryStream())
+            // Upload the image to Azure Blob Storage
+            using (var stream = image.OpenReadStream())
             {
-                await stream.CopyToAsync(memoryStream);
-                imageData = memoryStream.ToArray();
+                var imageUrl = await _blobStorageService.UploadImageAsync("ipcontainer", image);
+
+                // Save article to database with the image URL
+                var article = new Articole
+                {
+                    Title = title,
+                    Author = author,
+                    Content = content,
+                    DatePublished = datePublished,
+                    ImageUrl = imageUrl
+                };
+
+                _aplicatieDBContext.Articole.Add(article);
+                await _aplicatieDBContext.SaveChangesAsync();
+
+                return article;
             }
-
-            // Save article to database
-            var article = new Articole
-            {
-                Title = articol.Title,
-                Author = articol.Author,
-                Content = articol.Content,
-                DatePublished = DateTime.Now,
-                ImageData = imageData
-            };
-
-            _aplicatieDBContext.Articole.Add(article);
-            await _aplicatieDBContext.SaveChangesAsync();
-            return article;
         }
+
+
 
         public async Task<Articole> DeleteArticole(Guid id)
         {
@@ -99,7 +102,7 @@ namespace aplicatieHandbal.Services
                 articol.Author = updateArticoleReq.Author;
                 articol.Content = updateArticoleReq.Content;
                 articol.DatePublished = updateArticoleReq.DatePublished;
-                articol.ImageData = updateArticoleReq.ImageData;
+                articol.ImageUrl = updateArticoleReq.ImageUrl;
                 await _aplicatieDBContext.SaveChangesAsync();
                 return articol;
             }
