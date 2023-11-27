@@ -9,9 +9,7 @@ namespace aplicatieHandbal.Validators
     {
         public GameValidator() {
             RuleFor(game => game.Title).NotEmpty().WithMessage("Title is required");
-            RuleFor(game => game.Date)
-               .NotEmpty().WithMessage("Date is required")
-               .Must(BeAValidDate).WithMessage("Invalid date format");
+           
             RuleFor(game => game.Location).NotEmpty().WithMessage("Location is required");
             RuleFor(game => game.Result)
                 .IsInEnum().WithMessage("Invalid game result");
@@ -19,10 +17,7 @@ namespace aplicatieHandbal.Validators
                 .IsInEnum().WithMessage("Invalid game status");
 
         }
-        private bool BeAValidDate(DateTime date)
-        {
-            return date >= DateTime.Now;
-        }
+    
 
     }
 }
