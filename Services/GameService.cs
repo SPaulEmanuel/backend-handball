@@ -72,7 +72,6 @@ namespace aplicatieHandbal.Services
                 game.Date = updateGameReq.Date;
                 game.Location = updateGameReq.Location;
                 game.Result = updateGameReq.Result;
-                game.Referee = updateGameReq.Referee;
                 game.Status = updateGameReq.Status;
                 game.Description = updateGameReq.Description;
                 game.Attendance = updateGameReq.Attendance;

@@ -2,7 +2,7 @@
 using aplicatieHandbal.Models;
 using FluentValidation;
 
-public class PlayerValidator : AbstractValidator<PlayerInputModel>
+public class PlayerValidator : AbstractValidator<Player>
 {
     public PlayerValidator()
     {

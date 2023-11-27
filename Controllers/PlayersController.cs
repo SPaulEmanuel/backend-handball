@@ -31,7 +31,7 @@ namespace aplicatieHandbal.Controllers
             return Ok(await _playerService.GetAllInfoPlayers());
         }
         [HttpPost]
-        public async Task<IActionResult> AddPlayer([FromForm] PlayerInputModel model)
+        public async Task<IActionResult> AddPlayer([FromForm] Player model)
         {
             
             return Ok(await _playerService.AddPlayer(model));

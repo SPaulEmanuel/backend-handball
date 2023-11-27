@@ -18,15 +18,7 @@ namespace aplicatieHandbal.Data
         public DbSet<Ticket> Tickets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Game>()
-                .HasOne(g => g.Player)        // Each game has one player
-                .WithMany()                   // Each player can be associated with multiple games
-                .HasForeignKey(g => g.PlayerId);
-
-           
-            modelBuilder.Entity<Player>()
-                .Property(p => p.Salary)
-                .HasColumnType("decimal(18, 2)");
+          
             modelBuilder.Entity<Ticket>()
                 .Property(t => t.Price)
                 .HasColumnType("decimal(18, 2)");

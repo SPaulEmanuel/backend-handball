@@ -12,7 +12,7 @@ namespace aplicatieHandbal.Services
     {
         Task<List<PlayerDto>> GetAllPlayers();
         Task<List<Player>> GetAllInfoPlayers();
-        Task<Player> AddPlayer(PlayerInputModel model);
+        Task<Player> AddPlayer(Player model);
         Task<Player> GetPlayerById(Guid id);
         Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
         Task<Player> DeletePlayer(Guid id);
@@ -22,44 +22,21 @@ namespace aplicatieHandbal.Services
     public class PlayerService : IPlayerService
     {
         private readonly AplicatieDBContext _aplicatieDBContext;
-        public PlayerService(AplicatieDBContext dbContext)
+        private readonly AzureBlobStorageService _blobStorageService;
+        public PlayerService(AplicatieDBContext dbContext, AzureBlobStorageService blobStorageService)
         {
             _aplicatieDBContext = dbContext;
+            _blobStorageService = blobStorageService;
         }
-        public async Task<Player> AddPlayer(PlayerInputModel model)
+        public async Task<Player> AddPlayer(Player model)
         {
             var validator = new PlayerValidator();
             validator.ValidateAndThrow(model);
-
-            byte[] imageUrl;
-            using (var stream = model.Image.OpenReadStream())
-            using (var memoryStream = new MemoryStream())
-            {
-                await stream.CopyToAsync(memoryStream);
-                imageUrl = memoryStream.ToArray();
-            }
-            var player = new Player
-            {
-                Name = model.Name,
-                Surname = model.Surname,
-                Age = model.Age,
-                Position = model.Position,
-                Height = model.Height,
-                Weight = model.Weight,
-                Nationality = model.Nationality,
-                JerseyNumber = model.JerseyNumber,  
-                ContractStartDate = model.ContractStartDate,
-                ContractEndDate = model.ContractEndDate,
-                Salary = model.Salary,
-                GoalsScored = model.GoalsScored,
-                ImageUrl = imageUrl,
-                InstagramProfile = model.InstagramProfile
-                
-            };
-
-            _aplicatieDBContext.Players.Add(player);
+            _aplicatieDBContext.Players.Add(model);
             await _aplicatieDBContext.SaveChangesAsync();
-            return player;
+
+            return model;
+
         }
 
         public async Task<Player> DeletePlayer(Guid id)
@@ -87,7 +64,7 @@ namespace aplicatieHandbal.Services
                 {
                     Name = player.Name,
                     Surname = player.Surname,
-                    ImageUrl = player.ImageUrl
+                    ImageUrl=player.ImageUrl
                 })
                 .ToListAsync();
 
@@ -129,16 +106,8 @@ namespace aplicatieHandbal.Services
                 player.Surname = updatePlayerReq.Surname;
                 player.Age = updatePlayerReq.Age;
                 player.Position = updatePlayerReq.Position;
-                player.Height = updatePlayerReq.Height;
-                player.Weight = updatePlayerReq.Weight;
-                player.Nationality = updatePlayerReq.Nationality;
-                player.JerseyNumber = updatePlayerReq.JerseyNumber;
-                player.ContractStartDate = updatePlayerReq.ContractStartDate;
-                player.ContractEndDate = updatePlayerReq.ContractEndDate;
-                player.Salary = updatePlayerReq.Salary;
                 player.GoalsScored = updatePlayerReq.GoalsScored;
                 player.ImageUrl = updatePlayerReq.ImageUrl;
-                player.InstagramProfile = updatePlayerReq.InstagramProfile;
 
                 await _aplicatieDBContext.SaveChangesAsync();
                 return player;

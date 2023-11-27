@@ -10,7 +10,7 @@ namespace aplicatieHandbal.Services
     public interface IArticleService
     {
         Task<List<Articole>> GetAllArticole();
-        Task<Articole> CreateArticle(string title, string author, string content, DateTime datePublished, [FromForm] IFormFile image);
+        Task<Articole> CreateArticle(Articole articol);
         Task<Articole> GetArticoleById(Guid id);
         Task<Articole> UpdateArticole(Guid id, Articole updateArticoleReq);
         Task<Articole> DeleteArticole(Guid id);
@@ -27,32 +27,13 @@ namespace aplicatieHandbal.Services
             _aplicatieDBContext = aplicatieDBContext;
             _blobStorageService = blobStorageService;
         }
-        public async Task<Articole> CreateArticle(string title, string author, string content, DateTime datePublished, [FromForm] IFormFile image)
+        public async Task<Articole> CreateArticle(Articole articol)
         {
-            // Upload the image to Azure Blob Storage
-            using (var stream = image.OpenReadStream())
-            {
-                var imageUrl = await _blobStorageService.UploadImageAsync("ipcontainer", image);
+            _aplicatieDBContext.Articole.Add(articol);
+            await _aplicatieDBContext.SaveChangesAsync();
 
-                // Save article to database with the image URL
-                var article = new Articole
-                {
-                    Title = title,
-                    Author = author,
-                    Content = content,
-                    DatePublished = datePublished,
-                    ImageUrl = imageUrl
-                };
-
-                _aplicatieDBContext.Articole.Add(article);
-                await _aplicatieDBContext.SaveChangesAsync();
-
-                return article;
-            }
+            return articol;
         }
-
-
-
         public async Task<Articole> DeleteArticole(Guid id)
         {
             var articol = await _aplicatieDBContext.Articole.FindAsync(id);

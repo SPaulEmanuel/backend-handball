@@ -26,11 +26,10 @@ namespace aplicatieHandbal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateArticle(string title, string author, string content, DateTime datePublished, [FromForm] IFormFile image)
+        [Route("/articles")]
+        public async Task<IActionResult> CreateArticle([FromBody]  Articole articol)
         {
-            var createdArticle = await _articleService.CreateArticle (title, author, content,datePublished,image);
-
-            return Ok(createdArticle);
+           return Ok(_articleService.CreateArticle(articol));
         }
 
         [HttpGet]

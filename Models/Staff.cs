@@ -5,6 +5,6 @@
         public Guid StaffID { get; set; }
         public string Name { get; set; }
         public string Vorname { get; set; }
-        public byte[] ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
