@@ -11,10 +11,7 @@ namespace aplicatieHandbal.Validators
             RuleFor(game => game.Title).NotEmpty().WithMessage("Title is required");
            
             RuleFor(game => game.Location).NotEmpty().WithMessage("Location is required");
-            RuleFor(game => game.Result)
-                .IsInEnum().WithMessage("Invalid game result");
-            RuleFor(game => game.Status)
-                .IsInEnum().WithMessage("Invalid game status");
+  
 
         }
     
