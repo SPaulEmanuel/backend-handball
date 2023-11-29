@@ -7,21 +7,24 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Azure.Storage.Blob;
-
+using aplicatieHandbal.Data;
+using Microsoft.EntityFrameworkCore;
+using aplicatieHandbal.Models;
 namespace aplicatieHandbal.Controllers
 {
     [Route("api/images")]
     [ApiController]
     public class ImageController : ControllerBase
     {
-        private readonly string storageAccountName = "ipstorage1989";
-        private readonly string containerName = "ipcontainer";
+        private readonly AplicatieDBContext _aplicatieDBContext;
+        public ImageController(AplicatieDBContext aplicatieDBContext) { 
+            _aplicatieDBContext = aplicatieDBContext;
+        }
         [HttpGet]
         public async Task<IActionResult> GetHomepageImage()
         {
-            string blobName = "echipaHome.png";
-            var imageUrl = $"https://{storageAccountName}.blob.core.windows.net/{containerName}/{blobName}";
-            return Redirect(imageUrl);
+            var img = await _aplicatieDBContext.Imagini.ToListAsync();
+            return Ok(img);
         }
     }
 }
