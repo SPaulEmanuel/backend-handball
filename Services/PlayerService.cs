@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+using Newtonsoft.Json;
+
 namespace aplicatieHandbal.Services
 {
     public interface IPlayerService
@@ -23,10 +25,12 @@ namespace aplicatieHandbal.Services
     {
         private readonly AplicatieDBContext _aplicatieDBContext;
         private readonly AzureBlobStorageService _blobStorageService;
+     
         public PlayerService(AplicatieDBContext dbContext, AzureBlobStorageService blobStorageService)
         {
             _aplicatieDBContext = dbContext;
             _blobStorageService = blobStorageService;
+
         }
         public async Task<Player> AddPlayer(Player model)
         {
@@ -70,6 +74,7 @@ namespace aplicatieHandbal.Services
 
             return players;
         }
+       
 
 
         public async Task<Player> GetPlayerById(Guid id)

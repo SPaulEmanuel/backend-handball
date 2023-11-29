@@ -19,8 +19,6 @@ namespace aplicatieHandbal.Services
         {
             var container = _blobClient.GetContainerReference(containerName);
             await container.CreateIfNotExistsAsync();
-
-            // Generate a unique filename
             string uniqueFilename = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
             var blockBlob = container.GetBlockBlobReference(uniqueFilename);
