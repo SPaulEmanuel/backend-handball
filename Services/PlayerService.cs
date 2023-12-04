@@ -14,6 +14,7 @@ namespace aplicatieHandbal.Services
     {
         Task<List<PlayerDto>> GetAllPlayers();
         Task<List<Player>> GetAllInfoPlayers();
+        Task<Dictionary<string, List<PlayerDto>>> GetPlayersByPosition();
         Task<Player> AddPlayer(Player model);
         Task<Player> GetPlayerById(Guid id);
         Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
@@ -69,12 +70,32 @@ namespace aplicatieHandbal.Services
                     Name = player.Name,
                     Surname = player.Surname,
                     ImageUrl=player.ImageUrl
-                })
+                }) 
                 .ToListAsync();
 
             return players;
         }
-       
+        // PlayerService.cs
+
+        public async Task<Dictionary<string, List<PlayerDto>>> GetPlayersByPosition()
+        {
+            var playersByPosition = await _aplicatieDBContext.Players
+                .GroupBy(player => player.Position)
+                .ToDictionaryAsync(
+                    group => group.Key,
+                    group => group.Select(player => new PlayerDto
+                    {
+                        Name = player.Name,
+                        Surname = player.Surname,
+                        ImageUrl = player.ImageUrl
+                      
+                    }).ToList()
+                );
+
+            return playersByPosition;
+        }
+
+
 
 
         public async Task<Player> GetPlayerById(Guid id)

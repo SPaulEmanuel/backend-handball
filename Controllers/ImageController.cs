@@ -23,8 +23,8 @@ namespace aplicatieHandbal.Controllers
         [HttpGet]
         public async Task<IActionResult> GetHomepageImage()
         {
-            var img = await _aplicatieDBContext.Imagini.ToListAsync();
-            return Ok(img);
+            return Ok( await _aplicatieDBContext.Imagini.ToListAsync());
+           
         }
     }
 }

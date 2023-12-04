@@ -19,6 +19,16 @@ namespace aplicatieHandbal.Controllers
         {
             _playerService = playerService!; 
         }
+      
+
+        [HttpGet]
+        [Route("GetPlayersByPosition")]
+        public async Task<IActionResult> GetPlayersByPosition()
+        {
+            var playersByPosition = await _playerService.GetPlayersByPosition();
+            return Ok(playersByPosition);
+        }
+
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllPlayers()
         {
