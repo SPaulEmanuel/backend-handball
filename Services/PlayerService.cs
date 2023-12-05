@@ -37,6 +37,7 @@ namespace aplicatieHandbal.Services
         {
             var validator = new PlayerValidator();
             validator.ValidateAndThrow(model);
+            model.PlayerID = Guid.NewGuid();
             _aplicatieDBContext.Players.Add(model);
             await _aplicatieDBContext.SaveChangesAsync();
 
