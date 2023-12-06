@@ -19,6 +19,8 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped<IGameService, GameService>();
 
+builder.Services.AddScoped<IStaffService, StaffService>();
+
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<AzureBlobStorageService>();
 

@@ -11,7 +11,7 @@ namespace aplicatieHandbal.Services
 {
         public interface IStaffService
         {
-            Task<List<Staff>> GetAllStaff();
+            Task<List<StaffDto>> GetAllStaff();
             Task<List<Staff>> GetAllInfoStaff();
             Task<Dictionary<string, List<StaffDto>>> GetStaffByPosition();
             Task<Staff> AddStaff(Staff model);
@@ -61,10 +61,10 @@ namespace aplicatieHandbal.Services
                 return staff;
             }
 
-            public async Task<List<Staff>> GetAllStaff()
+            public async Task<List<StaffDto>> GetAllStaff()
             {
                 var allStaff = await _aplicatieDBContext.Staff
-                    .Select(staff => new Staff
+                    .Select(staff => new StaffDto
                     {
                         Name = staff.Name,
                         Surname = staff.Surname,
