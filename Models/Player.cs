@@ -13,8 +13,5 @@ namespace aplicatieHandbal.Models
         public int JerseyNumber { get; set; }   
         public int GoalsScored { get; set; }
         public string ImageUrl { get; set; }
-     
-       
-
     }
 }
