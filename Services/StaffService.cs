@@ -21,7 +21,7 @@ namespace aplicatieHandbal.Services
             Task<Staff> updateStaffPatch(Guid id, JsonPatchDocument updatedPlayerReq);
         }
 
-        public class StaffService : IStaffService
+        public class StaffService : IStaffService 
         {
             private readonly AplicatieDBContext _aplicatieDBContext;
             private readonly AzureBlobStorageService _blobStorageService;

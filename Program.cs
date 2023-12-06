@@ -18,13 +18,12 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped<IGameService, GameService>();
-<<<<<<< HEAD
+
 
 builder.Services.AddScoped<IStaffService, StaffService>();
 
-=======
+
 builder.Services.AddScoped<IStaffService, StaffService>();
->>>>>>> 42f529d5978e40fa98bd8396108cd8027129a6bc
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<AzureBlobStorageService>();
 
