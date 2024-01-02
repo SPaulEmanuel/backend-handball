@@ -15,17 +15,13 @@ namespace aplicatieHandbal.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Articole> Articole { get; set; }
         public DbSet<Staff> Staff { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Images> Imagini { get; set; }
         public DbSet<Login> Login { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
           
-            modelBuilder.Entity<Ticket>()
-                .Property(t => t.Price)
-                .HasColumnType("decimal(18, 2)");
-
+           
             modelBuilder.Entity<Login>().HasKey(login => login.idSecurity);
 
 
