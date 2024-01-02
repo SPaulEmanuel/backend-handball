@@ -2,7 +2,7 @@ namespace aplicatieHandbal.Models;
 
 using System.Text.Json.Serialization;
 
-public class User
+public class Users
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -11,4 +11,5 @@ public class User
 
     [JsonIgnore]
     public string Password { get; set; }
+    public string UserType { get; set; }
 }
