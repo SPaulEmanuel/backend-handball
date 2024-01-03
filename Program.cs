@@ -16,6 +16,9 @@ builder.Services.AddDbContext<AplicatieDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("FullStackConnectionString"));
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 builder.Services.AddScoped<IGameService, GameService>();
