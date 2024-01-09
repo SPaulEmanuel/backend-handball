@@ -17,18 +17,14 @@ namespace aplicatieHandbal.Data
         public DbSet<Articole> Articole { get; set; }
         public DbSet<Staff> Staff { get; set; }
         public DbSet<Images> Imagini { get; set; }
-        public DbSet<Users> Login { get; set; }
+        public DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<Images>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }
-  
-
-
+ 
     }
 }
 

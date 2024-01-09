@@ -27,7 +27,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpGet]
     public IActionResult GetAll()
     {

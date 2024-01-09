@@ -7,32 +7,32 @@ using System.Security.Claims;
 using System.Text;
 using aplicatieHandbal.Helpers;
 using aplicatieHandbal.Models;
+using aplicatieHandbal.Data;
+using Microsoft.EntityFrameworkCore;
 
 public interface IUserService
 {
     AuthenticateResponse Authenticate(AuthenticateRequest model);
-    IEnumerable<Users> GetAll();
+    Task<List<Users>> GetAll();
     Users GetById(int id);
 }
 
 public class UserService : IUserService
 {
-    // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-    private List<Users> _users = new List<Users>
-    {
-        new Users { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-    };
+    private List<Users> _users = new List<Users>();
 
     private readonly AppSettings _appSettings;
+    private readonly AplicatieDBContext _aplicatieDBContext;
 
-    public UserService(IOptions<AppSettings> appSettings)
+    public UserService(IOptions<AppSettings> appSettings, AplicatieDBContext dbContext)
     {
+        _aplicatieDBContext = dbContext;
         _appSettings = appSettings.Value;
     }
 
     public AuthenticateResponse Authenticate(AuthenticateRequest model)
     {
-        var user = _users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+        var user = _users.SingleOrDefault(x => x.Username == model.Username);
 
         // return null if user not found
         if (user == null) return null;
@@ -43,9 +43,20 @@ public class UserService : IUserService
         return new AuthenticateResponse(user,token);
     }
 
-    public IEnumerable<Users> GetAll()
+    public async Task<List<Users>> GetAll()
     {
-        return _users;
+        var allUsers = await _aplicatieDBContext.Users
+                    .Select(user => new Users
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Username = user.Username,
+                        Password = user.Password,
+                        UserType = user.UserType
+                    })
+                    .ToListAsync();
+
+        return allUsers;
     }
 
     public Users GetById(int id)
