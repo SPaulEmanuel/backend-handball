@@ -9,11 +9,13 @@ using aplicatieHandbal.Helpers;
 using aplicatieHandbal.Models;
 using aplicatieHandbal.Data;
 using Microsoft.EntityFrameworkCore;
+using aplicatieHandbal.Validators;
 
 public interface IUserService
 {
-    AuthenticateResponse Authenticate(AuthenticateRequest model);
-    Task<List<Users>> GetAll();
+    Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
+    Task<List<UserDto>> GetAll();
+    /*Task<Users> AddUser(Users model);*/
     Users GetById(int id);
 }
 
@@ -30,9 +32,9 @@ public class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public AuthenticateResponse Authenticate(AuthenticateRequest model)
+    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
-        var user = _users.SingleOrDefault(x => x.Username == model.Username);
+        var user = await _aplicatieDBContext.Users.SingleOrDefaultAsync(x => x.Username == model.Username);
 
         // return null if user not found
         if (user == null) return null;
@@ -43,15 +45,27 @@ public class UserService : IUserService
         return new AuthenticateResponse(user,token);
     }
 
-    public async Task<List<Users>> GetAll()
+    /*public async Task<Users> AddUsers(Users model)
+    {
+        var validator = new PlayerValidator();
+        validator.ValidateAndThrow(model);
+        model.PlayerID = Guid.NewGuid();
+        _aplicatieDBContext.Players.Add(model);
+        await _aplicatieDBContext.SaveChangesAsync();
+
+        return model;
+
+    }*/
+
+    public async Task<List<UserDto>> GetAll()
     {
         var allUsers = await _aplicatieDBContext.Users
-                    .Select(user => new Users
+                    .Select(user => new UserDto
                     {
+                        Id = user.Id,
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Username = user.Username,
-                        Password = user.Password,
                         UserType = user.UserType
                     })
                     .ToListAsync();

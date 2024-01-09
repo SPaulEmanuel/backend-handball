@@ -15,7 +15,7 @@ namespace aplicatieHandbal.Services
         Task<List<PlayerDto>> GetAllPlayers();
         Task<List<Player>> GetAllInfoPlayers();
         Task<List<List<PlayerDto>>> GetPlayersByPosition();
-         Task<Player> AddPlayer(Player model);
+        Task<Player> AddPlayer(Player model);
         Task<Player> GetPlayerById(Guid id);
         Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
         Task<Player> DeletePlayer(Guid id);

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Configuration;
+using aplicatieHandbal.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<AzureBlobStorageService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
