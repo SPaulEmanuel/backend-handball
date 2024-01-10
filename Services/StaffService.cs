@@ -14,7 +14,7 @@ namespace aplicatieHandbal.Services
         {
             Task<List<StaffDto>> GetAllStaff();
             Task<List<Staff>> GetAllInfoStaff();
-            Task<Dictionary<string, List<StaffDto>>> GetStaffByPosition();
+            Task<List<List<StaffDto>>> GetStaffByPosition();
             Task<Staff> AddStaff(Staff model);
             Task<Staff> GetStaffById(Guid id);
             Task<Staff> UpdateStaff(Guid id, Staff updatedStaff);
@@ -77,20 +77,18 @@ namespace aplicatieHandbal.Services
             }
             // PlayerService.cs
 
-            public async Task<Dictionary<string, List<StaffDto>>> GetStaffByPosition()
+            public async Task<List<List<StaffDto>>> GetStaffByPosition()
             {
             var staffByPosition = await _aplicatieDBContext.Staff
                 .GroupBy(staff => staff.Position)
-                .ToDictionaryAsync(
-                    group => group.Key,
-                    group => group.Select(staff => new StaffDto
+                .Select(group => group.Select(staff => new StaffDto
                     {
                         Name = staff.Name,
                         Surname = staff.Surname,
                         ImageUrl = staff.ImageUrl
 
-                    }).ToList()
-                );
+                    }).ToList())
+                .ToListAsync() ;
 
             return staffByPosition;
             }
