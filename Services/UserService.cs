@@ -10,13 +10,14 @@ using aplicatieHandbal.Models;
 using aplicatieHandbal.Data;
 using Microsoft.EntityFrameworkCore;
 using aplicatieHandbal.Validators;
+using FluentValidation;
 
 public interface IUserService
 {
     Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
     Task<List<UserDto>> GetAll();
-    /*Task<Users> AddUser(Users model);*/
-    Users GetById(int id);
+    Task<Users> AddUser(Users model);
+    Users GetById(Guid id);
 }
 
 public class UserService : IUserService
@@ -45,17 +46,16 @@ public class UserService : IUserService
         return new AuthenticateResponse(user,token);
     }
 
-    /*public async Task<Users> AddUsers(Users model)
+    public async Task<Users> AddUser(Users model)
     {
-        var validator = new PlayerValidator();
+        var validator = new UserValidator();
         validator.ValidateAndThrow(model);
-        model.PlayerID = Guid.NewGuid();
-        _aplicatieDBContext.Players.Add(model);
+        model.Id = Guid.NewGuid();
+        _aplicatieDBContext.Users.Add(model);
         await _aplicatieDBContext.SaveChangesAsync();
 
         return model;
-
-    }*/
+    }
 
     public async Task<List<UserDto>> GetAll()
     {
@@ -73,7 +73,7 @@ public class UserService : IUserService
         return allUsers;
     }
 
-    public Users GetById(int id)
+    public Users GetById(Guid id)
     {
         return _users.FirstOrDefault(x => x.Id == id);
     }

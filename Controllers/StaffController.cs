@@ -41,7 +41,6 @@ namespace aplicatieHandbal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddStaff([FromForm] Staff model)
         {
-
             return Ok(await _staffService.AddStaff(model));
         }
         [HttpGet]

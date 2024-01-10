@@ -17,12 +17,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    /*public async Task<IActionResult> AddUser( Users model)
+    public async Task<IActionResult> AddUser(Users model)
     {
 
         return Ok(await _userService.AddUser(model));
     }
-    [HttpGet]*/
+    /*[HttpGet]*/
 
     [HttpPost("authenticate")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest model)

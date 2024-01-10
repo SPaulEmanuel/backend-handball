@@ -8,8 +8,11 @@ namespace aplicatieHandbal.Validators
     {
         public UserValidator()
         {
-            RuleFor(player => player.FirstName).NotEmpty().WithMessage("Name is required");
-            RuleFor(player => player.LastName).NotEmpty().WithMessage("Surname is required");
+            RuleFor(user => user.FirstName).NotEmpty().WithMessage("FirstName is required");
+            RuleFor(user => user.LastName).NotEmpty().WithMessage("LastName is required");
+            RuleFor(user => user.Username).NotEmpty().WithMessage("Username is required");
+            RuleFor(user => user.Password).NotEmpty().WithMessage("Password is required");
+            RuleFor(user => user.UserType).NotEmpty().WithMessage("UserType is required");
         }
     }
 }

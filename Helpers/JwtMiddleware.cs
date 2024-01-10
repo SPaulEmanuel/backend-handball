@@ -44,9 +44,10 @@ public class JwtMiddleware
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+            var userIdString = jwtToken.Claims.First(x => x.Type == "id").Value;
+            var userId = Guid.Parse(userIdString);
 
-            // attach user to context on successful jwt validation
+            // ata?eaz? utilizatorul la context în cazul valid?rii de succes a JWT
             context.Items["User"] = userService.GetById(userId);
         }
         catch
