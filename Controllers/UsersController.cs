@@ -34,4 +34,5 @@ public class UsersController : ControllerBase
         var users = _userService.GetAll();
         return Ok(users);
     }
+    
 }
