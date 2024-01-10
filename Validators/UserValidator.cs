@@ -13,6 +13,7 @@ namespace aplicatieHandbal.Validators
             RuleFor(user => user.Username).NotEmpty().WithMessage("Username is required");
             RuleFor(user => user.Password).NotEmpty().WithMessage("Password is required");
             RuleFor(user => user.UserType).NotEmpty().WithMessage("UserType is required");
+            RuleFor(user => user.ImageUrl).NotEmpty().WithMessage("ImageUrl is required");
         }
     }
 }

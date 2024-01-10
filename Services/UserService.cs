@@ -66,7 +66,8 @@ public class UserService : IUserService
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         Username = user.Username,
-                        UserType = user.UserType
+                        UserType = user.UserType,
+                        ImageUrl = user.ImageUrl,
                     })
                     .ToListAsync();
 
