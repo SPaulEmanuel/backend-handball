@@ -22,7 +22,6 @@ public class UsersController : ControllerBase
 
         return Ok(await _userService.AddUser(model));
     }
-    /*[HttpGet]*/
 
     [HttpPost("authenticate")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest model)
@@ -35,7 +34,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    //[Authorize]
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
