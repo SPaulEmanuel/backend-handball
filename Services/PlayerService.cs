@@ -133,6 +133,7 @@ namespace aplicatieHandbal.Services
                 player.Position = updatePlayerReq.Position;
                 player.GoalsScored = updatePlayerReq.GoalsScored;
                 player.ImageUrl = updatePlayerReq.ImageUrl;
+                player.JerseyNumber = updatePlayerReq.JerseyNumber;
 
                 await _aplicatieDBContext.SaveChangesAsync();
                 return player;
