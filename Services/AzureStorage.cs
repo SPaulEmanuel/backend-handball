@@ -15,10 +15,11 @@ namespace aplicatieHandbal.Services
 
         public AzureStorage(IConfiguration configuration, ILogger<AzureStorage> logger)
         {
-            _storageConnectionString = configuration.GetValue<string>("BlobConnectionString");
-            _storageContainerName = configuration.GetValue<string>("BlobContainerName");
+            _storageConnectionString = configuration.GetConnectionString("BlobConnectionString");
+            _storageContainerName = configuration.GetValue<string>("ConnectionStrings:BlobContainerName");
             _logger = logger;
         }
+
 
         public async Task<BlobResponseDto> DeleteAsync(string blobFilename)
         {
