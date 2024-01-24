@@ -20,12 +20,12 @@ namespace aplicatieHandbal.Services
     {
 
         private readonly AplicatieDBContext _aplicatieDBContext;
-        private readonly AzureBlobStorageService _blobStorageService;
+        
 
-        public ArticleService(AplicatieDBContext aplicatieDBContext, AzureBlobStorageService blobStorageService)
+        public ArticleService(AplicatieDBContext aplicatieDBContext)
         {
             _aplicatieDBContext = aplicatieDBContext;
-            _blobStorageService = blobStorageService;
+            
         }
         public async Task<Articole> CreateArticle(Articole articol)
         {

@@ -25,12 +25,12 @@ namespace aplicatieHandbal.Services
     public class PlayerService : IPlayerService
     {
         private readonly AplicatieDBContext _aplicatieDBContext;
-        private readonly AzureBlobStorageService _blobStorageService;
+        
      
-        public PlayerService(AplicatieDBContext dbContext, AzureBlobStorageService blobStorageService)
+        public PlayerService(AplicatieDBContext dbContext)
         {
             _aplicatieDBContext = dbContext;
-            _blobStorageService = blobStorageService;
+            
 
         }
         public async Task<Player> AddPlayer(Player model)

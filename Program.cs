@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using aplicatieHandbal.Helpers;
+using Serilog;
+StaticLogger.EnsureInitialized();
+Log.Information("Azure Storage API Booting Up...");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add Azure Repository Service
+builder.Services.AddTransient<IAzureStorage, AzureStorage>();
+Log.Information("Services has been successfully added...");
 builder.Services.AddDbContext<AplicatieDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("FullStackConnectionString"));
@@ -32,7 +40,7 @@ builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddScoped<AzureBlobStorageService>();
+
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)

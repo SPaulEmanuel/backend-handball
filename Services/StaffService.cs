@@ -25,12 +25,12 @@ namespace aplicatieHandbal.Services
         public class StaffService : IStaffService 
         {
             private readonly AplicatieDBContext _aplicatieDBContext;
-            private readonly AzureBlobStorageService _blobStorageService;
+           
 
-            public StaffService(AplicatieDBContext dbContext, AzureBlobStorageService blobStorageService)
+            public StaffService(AplicatieDBContext dbContext)
             {
                 _aplicatieDBContext = dbContext;
-                _blobStorageService = blobStorageService;
+            
 
             }
 
