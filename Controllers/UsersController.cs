@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using aplicatieHandbal.Helpers;
 using aplicatieHandbal.Models;
 using aplicatieHandbal.Services;
+using CSU_Suceava_BE.Application.JwtUtils;
+using Microsoft.AspNetCore.Authorization;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class UsersController : ControllerBase
@@ -16,6 +20,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    [AuthorizeMultiplePolicy(Policies.Administrator, true)]
     [HttpPost]
     public async Task<IActionResult> AddUser(Users model)
     {
@@ -23,6 +28,7 @@ public class UsersController : ControllerBase
         return Ok(await _userService.AddUser(model));
     }
 
+    [AllowAnonymous]
     [HttpPost("authenticate")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest model)
     {
@@ -34,7 +40,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-/*    [Authorize]*/
+    [AuthorizeMultiplePolicy(Policies.Administrator, true)]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -42,6 +48,7 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
+    [AuthorizeMultiplePolicy(Policies.Administrator, true)]
     [HttpDelete]
     [Route("{id:Guid}")]
     public async Task<IActionResult> deleteUser([FromRoute] Guid id)

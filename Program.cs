@@ -7,10 +7,54 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using aplicatieHandbal.Helpers;
 using Serilog;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
+using System.Text;
 StaticLogger.EnsureInitialized();
 Log.Information("Azure Storage API Booting Up...");
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("AppSettings:Secret").Value!)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.Administrator, policy =>
+    policy.RequireAssertion(context => context.User.Claims.First(x => x.Type == "Role").Value == Policies.Administrator));
+
+    options.AddPolicy(Policies.CreatorDeContinut, policy =>
+    policy.RequireAssertion(context => context.User.Claims.First(x => x.Type == "Role").Value == Policies.CreatorDeContinut));
+});
 
 // Add services to the container.
 
@@ -58,5 +102,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.MapControllers();
+app.UseMiddleware<JwtMiddleware>();
+
 app.UseCors("AllowAll");
 app.Run();
