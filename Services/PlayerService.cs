@@ -17,7 +17,7 @@ namespace aplicatieHandbal.Services
         Task<List<List<PlayerDto>>> GetPlayersByPosition();
         Task<Player> AddPlayer(Player model);
         Task<Player> GetPlayerById(Guid id);
-        Task<Player> UpdatePlayer(Guid id, Player updatedPlayer);
+        Task<Player> UpdatePlayer(Guid id, Player updatedPlayer, string imageUrl);
         Task<Player> DeletePlayer(Guid id);
         Task<Player> updatePlayerPatch(Guid id, JsonPatchDocument updatedPlayerReq);
     }
@@ -119,9 +119,8 @@ namespace aplicatieHandbal.Services
             throw new Exception("player not found ");
         }
 
-        public async Task<Player> UpdatePlayer(Guid id, Player updatePlayerReq)
+        public async Task<Player> UpdatePlayer(Guid id, Player updatePlayerReq, string imageUrl)
         {
-
             var player = await _aplicatieDBContext.Players.FindAsync(id);
             if (player is not null)
             {
@@ -132,7 +131,7 @@ namespace aplicatieHandbal.Services
                 player.Age = updatePlayerReq.Age;
                 player.Position = updatePlayerReq.Position;
                 player.GoalsScored = updatePlayerReq.GoalsScored;
-                player.ImageUrl = updatePlayerReq.ImageUrl;
+                player.ImageUrl = imageUrl; // Update the ImageUrl with the provided URL
                 player.JerseyNumber = updatePlayerReq.JerseyNumber;
 
                 await _aplicatieDBContext.SaveChangesAsync();
@@ -140,6 +139,7 @@ namespace aplicatieHandbal.Services
             }
             throw new Exception("ID not found");
         }
+
 
 
     }

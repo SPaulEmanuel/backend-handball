@@ -62,9 +62,9 @@ namespace aplicatieHandbal.Controllers
         }
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> updatePlayer([FromRoute] Guid id, Player updatePlayerReq)
+        public async Task<IActionResult> updatePlayer([FromRoute] Guid id, Player updatePlayerReq, string imageUrl)
         {
-            return Ok(await _playerService.UpdatePlayer(id, updatePlayerReq));
+            return Ok(await _playerService.UpdatePlayer(id, updatePlayerReq,imageUrl));
         }
         [HttpDelete]
         [Route("{id:Guid}")]
