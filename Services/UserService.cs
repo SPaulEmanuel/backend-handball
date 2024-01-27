@@ -18,6 +18,8 @@ public interface IUserService
     Task<List<UserDto>> GetAll();
     Task<Users> AddUser(Users model);
     Users GetById(Guid id);
+    Task<Users> DeleteUser(Guid id);
+
 }
 
 public class UserService : IUserService
@@ -77,6 +79,19 @@ public class UserService : IUserService
     public Users GetById(Guid id)
     {
         return _users.FirstOrDefault(x => x.Id == id);
+    }
+
+    public async Task<Users> DeleteUser(Guid id)
+    {
+        var user = await _aplicatieDBContext.Users.FindAsync(id);
+        if (user is not null)
+        {
+            _aplicatieDBContext.Users.Remove(user);
+            await _aplicatieDBContext.SaveChangesAsync();
+            return user;
+        }
+        throw new Exception("Cannot delete this user! User not exist!");
+
     }
 
     // helper methods

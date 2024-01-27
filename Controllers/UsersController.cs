@@ -41,5 +41,12 @@ public class UsersController : ControllerBase
         var users = await _userService.GetAll();
         return Ok(users);
     }
-    
+
+    [HttpDelete]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> deleteUser([FromRoute] Guid id)
+    {
+        return Ok(await _userService.DeleteUser(id));
+    }
+
 }
