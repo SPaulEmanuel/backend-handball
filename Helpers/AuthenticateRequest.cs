@@ -1,4 +1,4 @@
-namespace aplicatieHandbal.Models;
+namespace aplicatieHandbal.Helpers;
 
 using System.ComponentModel.DataAnnotations;
 

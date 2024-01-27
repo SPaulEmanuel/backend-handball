@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
         return Ok(response);
     }
 
-    [Authorize]
+/*    [Authorize]*/
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
