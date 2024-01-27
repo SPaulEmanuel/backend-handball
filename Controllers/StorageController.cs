@@ -10,9 +10,8 @@ namespace aplicatieHandbal.Controllers
     public class StorageController : ControllerBase
     {
         private readonly IAzureStorage _storage;
-        private readonly PlayerService _playerService;
-
-        public StorageController(IAzureStorage storage,PlayerService playerService)
+        private readonly IPlayerService _playerService;
+        public StorageController(IAzureStorage storage, IPlayerService playerService)
         {
             _storage = storage;
             _playerService = playerService;
@@ -29,51 +28,36 @@ namespace aplicatieHandbal.Controllers
         }
 
 
-        /*  [HttpPost(nameof(Upload))]
-          public async Task<IActionResult> Upload(IFormFile file)
-          {
-              BlobResponseDto? response = await _storage.UploadAsync(file);
-
-              // Check if we got an error
-              if (response.Error == true)
-              {
-                  // We got an error during upload, return an error with details to the client
-                  return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
-              }
-              else
-              {
-                  // Return a success message to the client about successfull upload
-                  return StatusCode(StatusCodes.Status200OK, response);
-              }
-          }*/
         [HttpPost(nameof(Upload))]
-        public async Task<IActionResult> Upload(IFormFile file, [FromQuery] Guid playerId)
+        public async Task<IActionResult> Upload(Guid playerId, IFormFile file)
         {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("File is null or empty");
-            }
-
-            BlobResponseDto response = await _storage.UploadAsync(file);
-
-            if (response.Error)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
-            }
-
-            // File uploaded successfully, update Player's ImageUrl
-            Player player = await _playerService.GetPlayerById(playerId); 
-
+            // First, check if the player with the given ID exists
+            var player = await _playerService.GetPlayerById(playerId);
             if (player == null)
             {
-                return NotFound("Player not found");
+                return NotFound($"Player with ID {playerId} not found.");
             }
-            player.PlayerID=Guid.NewGuid();
-            // Update the player with the uploaded image URL
-            await _playerService.UpdatePlayer(playerId, player, response.Blob.Uri);
 
-            return Ok("File uploaded successfully");
+            // Now, proceed with the file upload
+            BlobResponseDto? response = await _storage.UploadAsync(playerId, file);
+
+            // Check if we got an error
+            if (response.Error)
+            {
+                // We got an error during upload, return an error with details to the client
+                return StatusCode(StatusCodes.Status500InternalServerError, response.Status);
+            }
+            else
+            {
+                // Update the player with the image URL
+                player.ImageUrl = response.Blob.Uri; // Accessing the URI property from BlobDto
+                await _playerService.UpdatePlayer(playerId, player); // Update the player with the new image URL
+
+                // Return a success message to the client about successful upload
+                return StatusCode(StatusCodes.Status200OK, response);
+            }
         }
+
 
 
 

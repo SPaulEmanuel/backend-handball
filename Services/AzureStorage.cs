@@ -8,16 +8,17 @@ namespace aplicatieHandbal.Services
     public class AzureStorage : IAzureStorage
     {
         #region Dependency Injection / Constructor
-
+        private readonly IPlayerService _playerService;
         private readonly string _storageConnectionString;
         private readonly string _storageContainerName;
         private readonly ILogger<AzureStorage> _logger;
 
-        public AzureStorage(IConfiguration configuration, ILogger<AzureStorage> logger)
+        public AzureStorage(IConfiguration configuration, ILogger<AzureStorage> logger, IPlayerService playerService)
         {
             _storageConnectionString = configuration.GetConnectionString("BlobConnectionString");
             _storageContainerName = configuration.GetValue<string>("ConnectionStrings:BlobContainerName");
             _logger = logger;
+            _playerService = playerService;
         }
 
 
@@ -110,7 +111,8 @@ namespace aplicatieHandbal.Services
             return files;
         }
 
-        public async Task<BlobResponseDto> UploadAsync(IFormFile blob)
+        /*
+         public async Task<BlobResponseDto> UploadAsync(IFormFile blob)
         {
             // Create new upload response object that we can return to the requesting method
             BlobResponseDto response = new();
@@ -157,6 +159,56 @@ namespace aplicatieHandbal.Services
             }
 
             // Return the BlobUploadResponse object
+            return response;
+        }*/
+        public async Task<BlobResponseDto> UploadAsync(Guid playerId, IFormFile blob)
+        {
+            BlobResponseDto response = new BlobResponseDto();
+
+            try
+            {
+                // Get the player by ID
+                var player = await _playerService.GetPlayerById(playerId);
+                if (player == null)
+                {
+                    response.Error = true;
+                    response.Status = $"Player with ID {playerId} not found.";
+                    return response;
+                }
+
+                // Get a reference to the blob container
+                BlobContainerClient container = new BlobContainerClient(_storageConnectionString, _storageContainerName);
+
+                // Get a reference to the blob client
+                BlobClient client = container.GetBlobClient(blob.FileName);
+
+                // Upload the file async
+                await using (Stream data = blob.OpenReadStream())
+                {
+                    await client.UploadAsync(data);
+                }
+
+                // Update player's image URL
+                player.ImageUrl = client.Uri.AbsoluteUri; // Assuming this is where the URL is stored
+                await _playerService.UpdatePlayer(playerId, player);
+
+                // Set response details
+                response.Status = $"File {blob.FileName} uploaded successfully.";
+                response.Error = false;
+                response.Blob.Uri = client.Uri.AbsoluteUri;
+                response.Blob.Name = client.Name;
+            }
+            catch (RequestFailedException ex) when (ex.ErrorCode == BlobErrorCode.BlobAlreadyExists)
+            {
+                response.Status = $"File with name {blob.FileName} already exists.";
+                response.Error = true;
+            }
+            catch (Exception ex)
+            {
+                response.Status = $"Unexpected error: {ex.Message}.";
+                response.Error = true;
+            }
+
             return response;
         }
 
