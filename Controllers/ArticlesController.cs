@@ -1,13 +1,24 @@
 ﻿using aplicatieHandbal.Data;
+using aplicatieHandbal.Helpers;
 using aplicatieHandbal.Models;
 using aplicatieHandbal.Services;
+
+using CSU_Suceava_BE.Application.JwtUtils;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
+
+
+
 namespace aplicatieHandbal.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ArticoleController : Controller
@@ -19,12 +30,14 @@ namespace aplicatieHandbal.Controllers
             _articleService = articleService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllArticole()
         { 
             return Ok(await _articleService.GetAllArticole());
         }
 
+        //[AuthorizeMultiplePolicy("AdminPolicy;ContentCreatorPoilicy", false)]
         [HttpPost]
         [Route("/articles")]
         public async Task<IActionResult> CreateArticle([FromBody]  Articole articol)
@@ -32,6 +45,7 @@ namespace aplicatieHandbal.Controllers
            return Ok(_articleService.CreateArticle(articol));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("{id:Guid}")]
         public async Task<IActionResult> GetArticoleById([FromRoute] Guid id)

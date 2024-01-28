@@ -49,6 +49,14 @@ public class UsersController : ControllerBase
     }
 
     [AuthorizeMultiplePolicy(Policies.Administrator, true)]
+    [HttpPut]
+    [Route("{id:Guid}")]
+    public async Task<IActionResult> updateUser([FromRoute] Guid id, Users updateUserReq)
+    {
+        return Ok(await _userService.UpdateUser(id, updateUserReq));
+    }
+
+    [AuthorizeMultiplePolicy(Policies.Administrator, true)]
     [HttpDelete]
     [Route("{id:Guid}")]
     public async Task<IActionResult> deleteUser([FromRoute] Guid id)

@@ -138,9 +138,5 @@ namespace aplicatieHandbal.Services
             }
             throw new Exception("ID not found");
         }
-
-
-
     }
-
 }

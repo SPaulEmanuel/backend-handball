@@ -6,7 +6,7 @@ namespace aplicatieHandbal.Helpers
     {
         public const string Administrator = "admin";
         public const string Paul = "Paul";
-        public const string CreatorDeContinut = "contentCreator";
+        public const string CreatorDeContinut = "creatorContinut";
 
         public static AuthorizationPolicy AdminPolicy()
         {

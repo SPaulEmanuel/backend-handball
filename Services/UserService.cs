@@ -17,6 +17,7 @@ public interface IUserService
     Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
     Task<List<UserDto>> GetAll();
     Task<Users> AddUser(Users model);
+    Task<Users> UpdateUser(Guid id, Users updatedUser);
     Users GetById(Guid id);
     Task<Users> DeleteUser(Guid id);
 
@@ -58,6 +59,27 @@ public class UserService : IUserService
 
         return model;
     }
+
+    public async Task<Users> UpdateUser(Guid id, Users updateUserReq)
+    {
+        var user = await _aplicatieDBContext.Users.FindAsync(id);
+        if (user is not null)
+        {
+            //var validator = new PlayerValidator();
+            //validator.ValidateAndThrow(updatePlayerReq);
+            user.FirstName = updateUserReq.FirstName;
+            user.LastName = updateUserReq.LastName;
+            user.Username = updateUserReq.Username;
+            user.Password = updateUserReq.Password;
+            user.UserType = updateUserReq.UserType;
+            user.ImageUrl = updateUserReq.ImageUrl;
+
+            await _aplicatieDBContext.SaveChangesAsync();
+            return user;
+        }
+        throw new Exception("ID not found");
+    }
+
 
     public async Task<List<UserDto>> GetAll()
     {
