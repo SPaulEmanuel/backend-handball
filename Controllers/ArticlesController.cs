@@ -37,7 +37,7 @@ namespace aplicatieHandbal.Controllers
             return Ok(await _articleService.GetAllArticole());
         }
 
-        //[AuthorizeMultiplePolicy("AdminPolicy;ContentCreatorPoilicy", false)]
+        [AuthorizeMultiplePolicy(Policies.Administrator + ";" + Policies.CreatorDeContinut, false)]
         [HttpPost]
         [Route("/articles")]
         public async Task<IActionResult> CreateArticle([FromBody]  Articole articol)
@@ -54,6 +54,7 @@ namespace aplicatieHandbal.Controllers
             return Ok(await _articleService.GetArticoleById(id));
         }
 
+        [AuthorizeMultiplePolicy(Policies.Administrator + ";" + Policies.CreatorDeContinut, false)]
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateArticole([FromRoute] Guid id, Articole updateArticoleReq)
@@ -61,6 +62,7 @@ namespace aplicatieHandbal.Controllers
             return Ok(await _articleService.UpdateArticole(id, updateArticoleReq));
         }
 
+        [AuthorizeMultiplePolicy(Policies.Administrator + ";" + Policies.CreatorDeContinut, false)]
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IActionResult> DeleteArticole([FromRoute] Guid id)
@@ -68,6 +70,8 @@ namespace aplicatieHandbal.Controllers
       
             return Ok(await _articleService.DeleteArticole(id));
         }
+
+        [AuthorizeMultiplePolicy(Policies.Administrator + ";" + Policies.CreatorDeContinut, false)]
         [HttpPatch]
         [Route("{id:Guid}")]
         public async Task<IActionResult> updateArticlePatch([FromRoute] Guid id, JsonPatchDocument updatedArticleReq)
